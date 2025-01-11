@@ -7,11 +7,11 @@ using UnityEngine;
 public class UiManager : MonoBehaviour
 {
     public static UiManager Uinstance;
-    [SerializeField] GameObject _gamePanel;
-    [SerializeField] GameObject _pausePanel;
-    [SerializeField] TextMeshProUGUI _lvlInfo;
-    [SerializeField] TextMeshProUGUI _scoreTxt;
-    [SerializeField] int _levelScore;
+
+    [SerializeField] private GameObject[] panels;
+    [SerializeField] private TextMeshProUGUI _lvlInfo;
+    [SerializeField] private TextMeshProUGUI _scoreTxt;
+    [SerializeField] private int _levelScore;
 
     private void Awake()
     {
@@ -19,20 +19,23 @@ public class UiManager : MonoBehaviour
         {
             Uinstance = this;
         }
-        else return;
+        else
+        {
+            Destroy(gameObject);
+        }
     }
-    private void OnEnable()
+    private void Start()
     {
-        //_lvlInfo.text =
+        ShowPanel(Panels.GamePanel);
     }
-
     public enum Panels
     {
         GamePanel,
         PausePanel,
+        FinishPanel
     }
 
-    public Panels CurrentPanel;
+    public Panels CurrentPanel { get; private set; }
 
     private int _score;
 
@@ -45,60 +48,50 @@ public class UiManager : MonoBehaviour
             UpdateScoreUI();
             if (_score >= _levelScore)
             {
-                ChangeScene();
+                FinishLevel();
             }
         }
     }
 
-    private void ChangeScene()
+    private void FinishLevel()
     {
-        
+        ShowPanel(Panels.FinishPanel);
+    }
+    public void NextLevel()
+    {
+        ShowPanel(Panels.FinishPanel);
     }
 
     private void UpdateScoreUI()
     {
         _scoreTxt.text = _score.ToString();
     }
+
     public void StartGame()
     {
-
+        
+    }
+    public void ReturnMainMenu()
+    {
+        
     }
     public void ExitGame()
     {
         Application.Quit();
     }
+
     public void ReStartGame()
     {
-
+        
     }
 
     public void ShowPanel(Panels panel)
     {
         CurrentPanel = panel;
 
-        switch (panel)
+        for (int i = 0; i < panels.Length; i++)
         {
-            case Panels.GamePanel:
-                _gamePanel.SetActive(true);
-                _pausePanel.SetActive(false);
-                break;
-
-            case Panels.PausePanel:
-                _gamePanel.SetActive(false);
-                _pausePanel.SetActive(true);
-                break;
-        }
-    }
-
-    public void TogglePause()
-    {
-        if (CurrentPanel == Panels.GamePanel)
-        {
-            ShowPanel(Panels.PausePanel);
-        }
-        else
-        {
-            ShowPanel(Panels.GamePanel);
+            panels[i].SetActive(i == (int)panel);
         }
     }
 }
