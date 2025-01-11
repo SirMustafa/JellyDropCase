@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     {
         if (context.started && !waitClickTime)
         {
+            StartCoroutine(waitNextClick());
             Vector3 mousePosition = Input.mousePosition;
             Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, Camera.main.nearClipPlane));
 
