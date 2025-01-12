@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
@@ -27,11 +28,14 @@ public class GameManager : MonoBehaviour
     }
     public void OnLeftMouse(InputAction.CallbackContext context)
     {
+        Vector3 mousePosition = Input.mousePosition;
+        Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, Camera.main.nearClipPlane));
+        if (worldMousePosition.y > 10) return;
+        
         if (context.started && !waitClickTime)
         {
             StartCoroutine(waitNextClick());
-            Vector3 mousePosition = Input.mousePosition;
-            Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, Camera.main.nearClipPlane));
+            
 
             float closestColumnX = _placeGenerator.ClosestTilePosition(worldMousePosition.x);
 
@@ -62,6 +66,7 @@ public class GameManager : MonoBehaviour
         TileBase randomTilePrefab = _tilePrefabs[Random.Range(0, _tilePrefabs.Count)];
         _currentTile = randomTilePrefab;
         _currentTile = Instantiate(randomTilePrefab, transform.position, Quaternion.identity);
+        _currentTile.transform.SetParent(this.transform);
     }
 
     public void GenerateTiles()
@@ -70,12 +75,11 @@ public class GameManager : MonoBehaviour
         {
             Vector2 spawnPosition = _desiredPositions[i];
             TileBase randomTilePrefab = _tilePrefabs[Random.Range(0, _tilePrefabs.Count)];
-            PlaceTileToGrid(spawnPosition, randomTilePrefab);
+            _placeGenerator.PlaceTile(spawnPosition, randomTilePrefab, false);
         }
     }
-
-    public void PlaceTileToGrid(Vector2 tilePosition, TileBase tilePrefab)
+    public void SetMouseClickTime()
     {
-        _placeGenerator.PlaceTile(tilePosition, tilePrefab, false);
-    } 
+        waitClickTime = !waitClickTime;
+    }
 }

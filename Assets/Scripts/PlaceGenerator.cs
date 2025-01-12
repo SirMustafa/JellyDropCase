@@ -7,7 +7,6 @@ public class PlaceGenerator : MonoBehaviour
 {
     public static PlaceGenerator Instance;
     [SerializeField] private GameObject _placePrefab;
-    [SerializeField] private TileBase _tilePrefab;
     [SerializeField] private int _width, _height;
 
     private List<float> _groundPositionsX = new List<float>();
@@ -84,6 +83,7 @@ public class PlaceGenerator : MonoBehaviour
         else
         {
             placedTile = Instantiate(tilePrefab, tilePosition, Quaternion.identity);
+            placedTile.transform.SetParent(this.transform);
             placedTile.name = $"Tile_{tilePosition.x}_{tilePosition.y}";
             _tileDictionary[tilePosition] = placedTile;
             CheckCorners(tilePosition, placedTile);
@@ -199,6 +199,11 @@ public class PlaceGenerator : MonoBehaviour
         {
             Vector2 currentPosition = new Vector2(xPos, y);
             Vector2 newPosition = new Vector2(xPos, y - 1);
+
+            if (newPosition.y < 0)
+            {
+                continue;
+            }
 
             if (_tileDictionary.TryGetValue(currentPosition, out TileBase currentTile) &&
                 _tileDictionary.TryGetValue(newPosition, out TileBase newTile) &&

@@ -3,36 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UiManager : MonoBehaviour
 {
     public static UiManager Uinstance;
 
     [SerializeField] private GameObject[] panels;
+    [SerializeField] private GameObject GamePanelStuff;
     [SerializeField] private TextMeshProUGUI _lvlInfo;
     [SerializeField] private TextMeshProUGUI _scoreTxt;
     [SerializeField] private int _levelScore;
-
-    private void Awake()
-    {
-        if (Uinstance == null)
-        {
-            Uinstance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-    private void Start()
-    {
-        ShowPanel(Panels.GamePanel);
-    }
+    [SerializeField] private int _maxSceneCount;
     public enum Panels
     {
         GamePanel,
         PausePanel,
-        FinishPanel
+        FinishPanel,
     }
 
     public Panels CurrentPanel { get; private set; }
@@ -52,14 +39,35 @@ public class UiManager : MonoBehaviour
             }
         }
     }
+    private void Awake()
+    {
+        if (Uinstance == null)
+        {
+            Uinstance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        ShowPanel(Panels.GamePanel);
+        _maxSceneCount = SceneManager.sceneCountInBuildSettings;
+    }
 
     private void FinishLevel()
     {
+        GamePanelStuff.SetActive(false);
         ShowPanel(Panels.FinishPanel);
     }
     public void NextLevel()
     {
-        ShowPanel(Panels.FinishPanel);
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextSceneIndex = (currentSceneIndex + 1) % _maxSceneCount;
+
+        SceneTransition.Sceneinstance.NextLevel(nextSceneIndex);
     }
 
     private void UpdateScoreUI()
@@ -69,23 +77,34 @@ public class UiManager : MonoBehaviour
 
     public void StartGame()
     {
-        
+        SceneTransition.Sceneinstance.NextLevel(1);
     }
     public void ReturnMainMenu()
     {
-        
+        SceneTransition.Sceneinstance.NextLevel(0);
     }
     public void ExitGame()
     {
         Application.Quit();
     }
+    public void PauseGame()
+    {
+        GameManager.GameManagerInstance.SetMouseClickTime();
+        ShowPanel(Panels.PausePanel);
+    }
+    public void ResumeGame()
+    {
+        ShowPanel(Panels.GamePanel);
+        GameManager.GameManagerInstance.SetMouseClickTime();
+    }
 
     public void ReStartGame()
     {
-        
+        int currentscene = SceneManager.GetActiveScene().buildIndex;
+        SceneTransition.Sceneinstance.NextLevel(currentscene);
     }
 
-    public void ShowPanel(Panels panel)
+    void ShowPanel(Panels panel)
     {
         CurrentPanel = panel;
 
