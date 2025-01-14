@@ -31,34 +31,35 @@ public class ThreeColored : TileBase
         {
             case Direction.Top:
 
-                topLeft.GetComponent<SpriteRenderer>().color = uniqueColor;
-                topRight.GetComponent<SpriteRenderer>().color = uniqueColor;
-                botLeft.GetComponent<SpriteRenderer>().color = sharedColor1;
-                botRight.GetComponent<SpriteRenderer>().color = sharedColor2;
+                childsSpriteRenderer[0].color = uniqueColor;
+                childsSpriteRenderer[1].color = uniqueColor;
+                childsSpriteRenderer[2].color = sharedColor1;
+                childsSpriteRenderer[3].color = sharedColor2;
+
                 break;
 
             case Direction.Bottom:
 
-                topLeft.GetComponent<SpriteRenderer>().color = sharedColor1;
-                topRight.GetComponent<SpriteRenderer>().color = sharedColor2;
-                botLeft.GetComponent<SpriteRenderer>().color = uniqueColor;
-                botRight.GetComponent<SpriteRenderer>().color = uniqueColor;
+                childsSpriteRenderer[0].color = sharedColor1;
+                childsSpriteRenderer[1].color = sharedColor2;
+                childsSpriteRenderer[2].color = uniqueColor;
+                childsSpriteRenderer[3].color = uniqueColor;
                 break;
 
             case Direction.Left:
 
-                topLeft.GetComponent<SpriteRenderer>().color = uniqueColor;
-                botLeft.GetComponent<SpriteRenderer>().color = uniqueColor;
-                topRight.GetComponent<SpriteRenderer>().color = sharedColor1;
-                botRight.GetComponent<SpriteRenderer>().color = sharedColor2;
+                childsSpriteRenderer[0].color = uniqueColor;
+                childsSpriteRenderer[1].color = sharedColor1;
+                childsSpriteRenderer[2].color = uniqueColor;
+                childsSpriteRenderer[3].color = sharedColor2;
                 break;
 
             case Direction.Right:
 
-                topLeft.GetComponent<SpriteRenderer>().color = sharedColor1;
-                botLeft.GetComponent<SpriteRenderer>().color = sharedColor2;
-                topRight.GetComponent<SpriteRenderer>().color = uniqueColor;
-                botRight.GetComponent<SpriteRenderer>().color = uniqueColor;
+                childsSpriteRenderer[0].color = sharedColor2;
+                childsSpriteRenderer[1].color = uniqueColor;
+                childsSpriteRenderer[2].color = sharedColor1;
+                childsSpriteRenderer[3].color = uniqueColor;
                 break;
         }
     }

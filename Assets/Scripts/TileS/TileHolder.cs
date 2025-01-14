@@ -15,6 +15,7 @@ public class TileHolder : MonoBehaviour
     public void Initialize(TileBase myTile)
     {
         CurrentTile = myTile;
+        CurrentTile.transform.position = _myPosition;
     }
 
     public TileBase GetCurrentTile()

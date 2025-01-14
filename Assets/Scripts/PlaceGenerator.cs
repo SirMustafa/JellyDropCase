@@ -27,6 +27,7 @@ public class PlaceGenerator : MonoBehaviour
         { Vector2.down, new (int, int)[] { (2, 0), (3, 1) } },
         { Vector2.right, new (int, int)[] { (3, 2), (1, 0) } }
     };
+    private float? _previousClosestX = null;
 
     private void Awake()
     {
@@ -48,7 +49,6 @@ public class PlaceGenerator : MonoBehaviour
                 GameObject spawnedPrefab = Instantiate(_placePrefab, spawnPosition, Quaternion.identity);
                 spawnedPrefab.transform.SetParent(this.transform);
                 spawnedPrefab.name = $"Place{x}_{y}";
-
                 _tileDictionary.Add(spawnPosition, null);
             }
         }
@@ -144,6 +144,7 @@ public class PlaceGenerator : MonoBehaviour
                 }
             }
         }
+        //CheckCorners();
     }
 
     private int GetDirectNeighborIndex(int cornerIndex, bool isFirstNeighbor)
@@ -188,7 +189,9 @@ public class PlaceGenerator : MonoBehaviour
         }
 
         return closestXPosition;
+
     }
+
 
     public void DropTilesAbove(int xPos, int yPos)
     {

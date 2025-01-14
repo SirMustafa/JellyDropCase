@@ -8,9 +8,10 @@ public class FourColored : TileBase
     {
         Color randomColor = currentTileType.Colors[Random.Range(0, currentTileType.Colors.Count)];
         randomColor.a = 1f;
-        topLeft.GetComponent<SpriteRenderer>().color = randomColor;
-        topRight.GetComponent<SpriteRenderer>().color = randomColor;
-        botLeft.GetComponent<SpriteRenderer>().color = randomColor;
-        botRight.GetComponent<SpriteRenderer>().color = randomColor;
+
+        for (int i = 0; i < 4; i++)
+        {
+            childsSpriteRenderer[i].color = randomColor;
+        }
     }
 }

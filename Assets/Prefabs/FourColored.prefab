@@ -385,7 +385,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentTileType: {fileID: 11400000, guid: 00d62db73342ecc46b7e2376798eb679, type: 2}
-  topLeft: {fileID: 5234561128309481684}
-  topRight: {fileID: 382354476108387912}
-  botLeft: {fileID: 3930870635414606566}
-  botRight: {fileID: 5627355498077940731}
+  childs:
+  - {fileID: 5234561128309481684}
+  - {fileID: 382354476108387912}
+  - {fileID: 3930870635414606566}
+  - {fileID: 5627355498077940731}

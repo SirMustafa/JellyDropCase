@@ -1,14 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager GameManagerInstance;
     [SerializeField] private PlaceGenerator _placeGenerator;
-
+    [SerializeField] Inputs inputs;
     [SerializeField] private List<TileBase> _tilePrefabs;
     [SerializeField] private List<Vector2> _desiredPositions = new List<Vector2>();
 
@@ -26,38 +24,20 @@ public class GameManager : MonoBehaviour
         GenerateTiles();
         SetNextPiece();
     }
-    public void OnLeftMouse(InputAction.CallbackContext context)
-    {
-        Vector3 mousePosition = Input.mousePosition;
-        Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, Camera.main.nearClipPlane));
-        if (worldMousePosition.y > 10) return;
-        
-        if (context.started && !waitClickTime)
+    public void CreateTile(float closestColumnX)
+    {        
+        Vector2? emptyTilePosition = _placeGenerator.FindEmptyTilePositionInColumn(closestColumnX);
+
+        if (emptyTilePosition.HasValue)
         {
-            StartCoroutine(waitNextClick());
-            
-
-            float closestColumnX = _placeGenerator.ClosestTilePosition(worldMousePosition.x);
-
-            Vector2? emptyTilePosition = _placeGenerator.FindEmptyTilePositionInColumn(closestColumnX);
-
-            if (emptyTilePosition.HasValue)
-            {
-                _placeGenerator.PlaceTile(emptyTilePosition.Value, _currentTile, true);
-                SetNextPiece();
-            }
-            else
-            {
-                Debug.Log("Bu sütunda boþ pozisyon yok.");
-                return;
-            }
+            _placeGenerator.PlaceTile(emptyTilePosition.Value, _currentTile, true);
+            SetNextPiece();
         }
-    }
-    IEnumerator waitNextClick()
-    {
-        waitClickTime = true;
-        yield return new WaitForSeconds(1.5f);
-        waitClickTime = false;
+        else
+        {
+            Debug.Log("Bu sütunda boþ pozisyon yok.");
+            return;
+        }
     }
 
     public void SetNextPiece()
@@ -67,6 +47,7 @@ public class GameManager : MonoBehaviour
         _currentTile = randomTilePrefab;
         _currentTile = Instantiate(randomTilePrefab, transform.position, Quaternion.identity);
         _currentTile.transform.SetParent(this.transform);
+        inputs.GetNextPiece(_currentTile);
     }
 
     public void GenerateTiles()

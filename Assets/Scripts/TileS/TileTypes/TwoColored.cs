@@ -24,18 +24,18 @@ public class TwoColored : TileBase
         if (splitDirection == Direction.Horizontal)
         {
 
-            topLeft.GetComponent<SpriteRenderer>().color = color1;
-            topRight.GetComponent<SpriteRenderer>().color = color1;
-            botLeft.GetComponent<SpriteRenderer>().color = color2;
-            botRight.GetComponent<SpriteRenderer>().color = color2;
+            childsSpriteRenderer[0].color = color1;
+            childsSpriteRenderer[1].color = color1;
+            childsSpriteRenderer[2].color = color2;
+            childsSpriteRenderer[3].color = color2;
         }
         else
         {
 
-            topLeft.GetComponent<SpriteRenderer>().color = color1;
-            botLeft.GetComponent<SpriteRenderer>().color = color1;
-            topRight.GetComponent<SpriteRenderer>().color = color2;
-            botRight.GetComponent<SpriteRenderer>().color = color2;
+            childsSpriteRenderer[0].color = color2;
+            childsSpriteRenderer[1].color = color2;
+            childsSpriteRenderer[2].color = color1;
+            childsSpriteRenderer[3].color = color1;
         }
     }
 }

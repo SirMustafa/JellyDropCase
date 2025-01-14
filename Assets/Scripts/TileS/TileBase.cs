@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,72 +6,60 @@ using UnityEngine;
 public abstract class TileBase : MonoBehaviour
 {
     [SerializeField] protected TileStatsSO currentTileType;
+    [SerializeField] protected List<GameObject> childs = new List<GameObject>();
+    protected List<SpriteRenderer> childsSpriteRenderer = new List<SpriteRenderer>();
 
-    [SerializeField] protected GameObject topLeft;
-    [SerializeField] protected GameObject topRight;
-    [SerializeField] protected GameObject botLeft;
-    [SerializeField] protected GameObject botRight;
-    [SerializeField] protected List<Color> childColors = new List<Color>();
-    bool isFulled = false;
     protected abstract void ApplyColors();
 
     private void OnEnable()
     {
+        GetAllSpriteRenderers();
         ApplyColors();
-        UpdateChildColors();
     }
-
-    private void UpdateChildColors()
+    void GetAllSpriteRenderers()
     {
-        childColors.Clear();
-        foreach (Transform child in transform)
+        for (int i = 0; i < 4; i++)
         {
-            if (child.TryGetComponent(out SpriteRenderer spriteRenderer))
-            {
-                childColors.Add(spriteRenderer.color);
-            }
+            childsSpriteRenderer.Add(childs[i].GetComponent<SpriteRenderer>());
         }
     }
 
     public Color GetChildColor(int whichOne)
     {
-        return childColors[whichOne];
+        return childsSpriteRenderer[whichOne].color;
     }
 
     public void SetChildColor(int whichOne, Color color)
     {
-        if (whichOne >= 0 && whichOne < transform.childCount)
+        if (whichOne >= 0 && whichOne < 4)
         {
-            transform.GetChild(whichOne).GetComponent<SpriteRenderer>().color = color;
+            childsSpriteRenderer[whichOne].color = color;
         }
     }
 
     public void UpdateVisuals()
     {
-        UpdateChildColors();
         CheckAndDestroy();
     }
 
     private void CheckAndDestroy()
     {
-        if (!isFulled)
+        Color firstCornerColor = childsSpriteRenderer[0].color;
+        for (int i = 1; i < 4; i++)
         {
-            Color firstCornerColor = childColors[0];
-            for (int i = 1; i < childColors.Count; i++)
+            if (childsSpriteRenderer[i].color != firstCornerColor)
             {
-                if (childColors[i] != firstCornerColor)
-                {
-                    return;
-                }
+                return;
             }
-
-            isFulled = true;
         }
-        else
+
+        transform.DOScale(Vector3.zero, 0.5f)
+        .SetEase(Ease.InBack)
+        .OnComplete(() =>
         {
             PlaceGenerator.Instance.DropTilesAbove((int)transform.position.x, (int)transform.position.y);
             UiManager.Uinstance.Score += 10;
             Destroy(gameObject);
-        }
+        });
     }
 }
