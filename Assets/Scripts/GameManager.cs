@@ -1,21 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager GameManagerInstance;
-    [SerializeField] private PlaceGenerator _placeGenerator;
-    [SerializeField] Inputs inputs;
     [SerializeField] private List<TileBase> _tilePrefabs;
     [SerializeField] private List<Vector2> _desiredPositions = new List<Vector2>();
 
-    TileBase _currentTile;
-    bool waitClickTime = false;
+    private PlaceManager _placeGenerator;
+    private Inputs _inputs;
+    private TileBase _currentTile;
 
-    private void Awake()
+    [Inject]
+    void ZenjectSetup(PlaceManager placemanager, Inputs input)
     {
-        GameManagerInstance = this;
+        _placeGenerator = placemanager;
+        _inputs = input;
     }
 
     private void Start()
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
         GenerateTiles();
         SetNextPiece();
     }
+
     public void CreateTile(float closestColumnX)
     {        
         Vector2? emptyTilePosition = _placeGenerator.FindEmptyTilePositionInColumn(closestColumnX);
@@ -47,7 +49,7 @@ public class GameManager : MonoBehaviour
         _currentTile = randomTilePrefab;
         _currentTile = Instantiate(randomTilePrefab, transform.position, Quaternion.identity);
         _currentTile.transform.SetParent(this.transform);
-        inputs.GetNextPiece(_currentTile);
+        _inputs.GetNextPiece(_currentTile);
     }
 
     public void GenerateTiles()
@@ -58,9 +60,5 @@ public class GameManager : MonoBehaviour
             TileBase randomTilePrefab = _tilePrefabs[Random.Range(0, _tilePrefabs.Count)];
             _placeGenerator.PlaceTile(spawnPosition, randomTilePrefab, false);
         }
-    }
-    public void SetMouseClickTime()
-    {
-        waitClickTime = !waitClickTime;
-    }
+    }   
 }

@@ -2,15 +2,22 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public abstract class TileBase : MonoBehaviour
 {
     [SerializeField] protected TileStatsSO currentTileType;
     [SerializeField] protected List<GameObject> childs = new List<GameObject>();
     protected List<SpriteRenderer> childsSpriteRenderer = new List<SpriteRenderer>();
+    protected PlaceManager _placeManager;
+
+    [Inject]
+    public void Construct(PlaceManager placeManager)
+    {
+        _placeManager = placeManager;
+    }
 
     protected abstract void ApplyColors();
-
     private void OnEnable()
     {
         GetAllSpriteRenderers();
@@ -57,7 +64,7 @@ public abstract class TileBase : MonoBehaviour
         .SetEase(Ease.InBack)
         .OnComplete(() =>
         {
-            PlaceGenerator.Instance.DropTilesAbove((int)transform.position.x, (int)transform.position.y);
+            PlaceManager.instance.DropTilesAbove((int)transform.position.x, (int)transform.position.y);
             UiManager.Uinstance.Score += 10;
             Destroy(gameObject);
         });

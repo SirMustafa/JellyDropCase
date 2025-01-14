@@ -10,6 +10,7 @@ public class UiManager : MonoBehaviour
     public static UiManager Uinstance;
 
     [SerializeField] private GameObject[] panels;
+    [SerializeField] private Inputs _inputs;
     [SerializeField] private GameObject GamePanelStuff;
     [SerializeField] private TextMeshProUGUI _lvlInfo;
     [SerializeField] private TextMeshProUGUI _scoreTxt;
@@ -89,13 +90,13 @@ public class UiManager : MonoBehaviour
     }
     public void PauseGame()
     {
-        GameManager.GameManagerInstance.SetMouseClickTime();
+        _inputs.SetMouseClickTime();
         ShowPanel(Panels.PausePanel);
     }
     public void ResumeGame()
     {
         ShowPanel(Panels.GamePanel);
-        GameManager.GameManagerInstance.SetMouseClickTime();
+        _inputs.SetMouseClickTime();
     }
 
     public void ReStartGame()

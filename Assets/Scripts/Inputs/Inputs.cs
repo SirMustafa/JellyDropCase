@@ -3,21 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
+using Zenject;
 
 public class Inputs : MonoBehaviour
 {
-    [SerializeField] PlaceGenerator placeGenerator;
     [SerializeField] float mouseSensitivity;
     public GameObject currentTile;
+    private PlaceManager _placeGenerator;
+    private GameManager _gameManager;
     private bool _isDragging = false;
+    private bool waitClickTime = false;
     private Vector2 _startMousePosition;
     private Vector2 _startTilePosition;
-    float newX;
+    private float newX;
 
-    private void Start()
+    [Inject]
+    void ZenjectSetup(PlaceManager placemanager, GameManager gamemanager)
     {
-        placeGenerator = PlaceGenerator.Instance;
+        _placeGenerator = placemanager;
+        _gameManager = gamemanager;
     }
+
     public void OnLeftMouse(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -46,14 +53,18 @@ public class Inputs : MonoBehaviour
     }
     private void OnTileReleased()
     {
-        float closestColumnX = placeGenerator.ClosestTilePosition(newX);
+        float closestColumnX = _placeGenerator.ClosestTilePosition(newX);
         currentTile.transform.DOMoveX(closestColumnX, 0.5f).OnComplete(() =>
         {
-            GameManager.GameManagerInstance.CreateTile(closestColumnX);  
+            _gameManager.CreateTile(closestColumnX);
         });
     }
     public void GetNextPiece(TileBase _currentile)
     {
         currentTile = _currentile.gameObject;
+    }
+    public void SetMouseClickTime()
+    {
+        waitClickTime = !waitClickTime;
     }
 }

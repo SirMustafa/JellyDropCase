@@ -829,6 +829,7 @@ MonoBehaviour:
   - {fileID: 834084566}
   - {fileID: 2105241778}
   - {fileID: 1672490614}
+  _inputs: {fileID: 1964065271}
   GamePanelStuff: {fileID: 2088288938}
   _lvlInfo: {fileID: 859426249}
   _scoreTxt: {fileID: 960376010}
@@ -1425,6 +1426,83 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &912702691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 912702692}
+  - component: {fileID: 912702693}
+  - component: {fileID: 912702694}
+  m_Layer: 0
+  m_Name: Zenject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &912702692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912702691}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &912702693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912702691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scriptableObjectInstallers: []
+  _monoInstallers:
+  - {fileID: 912702694}
+  _installerPrefabs: []
+  _autoRun: 1
+  OnPreInstall:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostInstall:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPreResolve:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostResolve:
+    m_PersistentCalls:
+      m_Calls: []
+  _parentNewObjectsUnderSceneContext: 0
+  _contractNames: []
+  _parentContractNames: []
+--- !u!114 &912702694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912702691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b44135039db5b474e9b334bc0b65decc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &960376009
 GameObject:
   m_ObjectHideFlags: 0
@@ -1588,8 +1666,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95704481636a90446a11ad74fb0b1a77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _placeGenerator: {fileID: 4284899}
-  inputs: {fileID: 1964065271}
   _tilePrefabs:
   - {fileID: -1292587364271686333, guid: fcf7d9c7e4598494b9eeb2021aca3737, type: 3}
   - {fileID: 4135240145495592528, guid: 43cc4d11c2da3ab4b9f632bbfbb2e70d, type: 3}
@@ -3096,7 +3172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec38cbbf547023419879aebab277745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placeGenerator: {fileID: 0}
   mouseSensitivity: 0.01
   currentTile: {fileID: 0}
 --- !u!114 &1964065272
@@ -3413,3 +3488,4 @@ SceneRoots:
   - {fileID: 2088288939}
   - {fileID: 1174015713}
   - {fileID: 1964065270}
+  - {fileID: 912702692}

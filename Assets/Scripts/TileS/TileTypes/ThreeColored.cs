@@ -4,63 +4,49 @@ using UnityEngine;
 
 public class ThreeColored : TileBase
 {
-    private enum Direction
-    {
-        Top,
-        Bottom,
-        Left,
-        Right
-    }
+    private enum Direction { Top, Bottom, Left, Right }
 
     protected override void ApplyColors()
     {
         Direction splitDirection = (Direction)Random.Range(0, System.Enum.GetValues(typeof(Direction)).Length);
+        Color uniqueColor = GetRandomColor();
+        Color sharedColor1 = GetRandomColor();
+        Color sharedColor2 = GetRandomColor();
 
-        List<Color> availableColors = new List<Color>(currentTileType.Colors);
-        Color uniqueColor = availableColors[Random.Range(0, availableColors.Count)];
-        uniqueColor.a = 1f;
-        availableColors.Remove(uniqueColor);
+        ApplyColorsByDirection(splitDirection, uniqueColor, sharedColor1, sharedColor2);
+    }
 
-        Color sharedColor1 = availableColors[Random.Range(0, availableColors.Count)];
-        sharedColor1.a = 1f;
-        availableColors.Remove(sharedColor1);
-        Color sharedColor2 = availableColors[Random.Range(0, availableColors.Count)];
-        sharedColor2.a = 1f;
+    private Color GetRandomColor()
+    {
+        Color color = currentTileType.Colors[Random.Range(0, currentTileType.Colors.Count)];
+        color.a = 1f;
+        return color;
+    }
 
-        switch (splitDirection)
+    private void ApplyColorsByDirection(Direction direction, Color unique, Color shared1, Color shared2)
+    {
+        switch (direction)
         {
             case Direction.Top:
-
-                childsSpriteRenderer[0].color = uniqueColor;
-                childsSpriteRenderer[1].color = uniqueColor;
-                childsSpriteRenderer[2].color = sharedColor1;
-                childsSpriteRenderer[3].color = sharedColor2;
-
+                AssignColors(unique, unique, shared1, shared2);
                 break;
-
             case Direction.Bottom:
-
-                childsSpriteRenderer[0].color = sharedColor1;
-                childsSpriteRenderer[1].color = sharedColor2;
-                childsSpriteRenderer[2].color = uniqueColor;
-                childsSpriteRenderer[3].color = uniqueColor;
+                AssignColors(shared1, shared2, unique, unique);
                 break;
-
             case Direction.Left:
-
-                childsSpriteRenderer[0].color = uniqueColor;
-                childsSpriteRenderer[1].color = sharedColor1;
-                childsSpriteRenderer[2].color = uniqueColor;
-                childsSpriteRenderer[3].color = sharedColor2;
+                AssignColors(unique, shared1, unique, shared2);
                 break;
-
             case Direction.Right:
-
-                childsSpriteRenderer[0].color = sharedColor2;
-                childsSpriteRenderer[1].color = uniqueColor;
-                childsSpriteRenderer[2].color = sharedColor1;
-                childsSpriteRenderer[3].color = uniqueColor;
+                AssignColors(shared2, unique, shared1, unique);
                 break;
         }
+    }
+
+    private void AssignColors(Color topLeft, Color topRight, Color bottomLeft, Color bottomRight)
+    {
+        childsSpriteRenderer[0].color = topLeft;
+        childsSpriteRenderer[1].color = topRight;
+        childsSpriteRenderer[2].color = bottomLeft;
+        childsSpriteRenderer[3].color = bottomRight;
     }
 }
